@@ -10,23 +10,18 @@ namespace Tuya.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController(IOrderRepository repositorioOrdene) : ControllerBase
     {
-        private readonly IOrderRepository _repositorioOrdenes;
-
-        /// <summary>
-        /// Constructor del controlador de órdenes.
-        /// </summary>
-        /// <param name="repositorioOrdenes">Repositorio de órdenes inyectado.</param>
-        public OrderController(IOrderRepository repositorioOrdenes)
-        {
-            _repositorioOrdenes = repositorioOrdenes;
-        }
+        private readonly IOrderRepository _repositorioOrdenes= repositorioOrdene;
 
         /// <summary>
         /// Obtiene todas las órdenes registradas en el sistema.
         /// </summary>
-        /// <returns>Lista de órdenes.</returns>
+        /// <param name="customerId">ID del cliente (opcional).</param>
+        /// <param name="fechaDesde">Fecha de inicio del rango (opcional).</param>
+        /// <param name="fechaHasta">Fecha final del rango (opcional).</param>
+        /// <param name="estado">Estado de la orden (opcional).</param>
+        /// <returns>Un resultado con la lista de órdenes filtradas.</returns>
         [HttpGet]
         public async Task<IActionResult> ConsultarTodos(int? customerId = null, DateTime? fechaDesde = null, DateTime? fechaHasta = null, string? estado = null)
         {
